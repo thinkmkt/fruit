@@ -366,19 +366,22 @@ export default function App() {
         identity: '',
         telecom: '0',
       }
-      const data = await apiPost(body, 300_000)
+      const res = await apiPost(body, 300_000)
+      const twoWay = res.data ?? res   // CODEF wraps in { result, data } or returns flat
 
-      if (data.continue2Way) {
+      if (twoWay.continue2Way) {
         setSavedBody(body)
         setTwoWayInfo({
-          jobIndex: data.jobIndex,
-          threadIndex: data.threadIndex,
-          jti: data.jti,
-          twoWayTimestamp: data.twoWayTimestamp,
+          jobIndex: twoWay.jobIndex,
+          threadIndex: twoWay.threadIndex,
+          jti: twoWay.jti,
+          twoWayTimestamp: twoWay.twoWayTimestamp,
         })
         setStep(2)
       } else {
-        setError('간편인증 요청 응답을 받지 못했습니다. 다시 시도해주세요.')
+        const code = res.result?.code || ''
+        const msg = res.result?.message || '간편인증 요청 응답을 받지 못했습니다.'
+        setError(`${msg}${code ? ` (${code})` : ''}`)
       }
     } catch (e) {
       setError(e.message || '요청 중 오류가 발생했습니다.')
@@ -398,11 +401,17 @@ export default function App() {
         is2Way: true,
         twoWayInfo,
       }
-      const data = await apiPost(body, 270_000)
-      setResults(data)
+      const res = await apiPost(body, 270_000)
+      const resultData = res.data ?? res
+      setResults(resultData)
       setStep(3)
     } catch (e) {
-      setError(e.message || '인증 확인 중 오류가 발생했습니다.')
+      const msg = e.message || ''
+      if (msg.includes('401')) {
+        setError('고객이 아직 카카오 인증을 완료하지 않았습니다. 인증 완료 후 다시 시도해주세요.')
+      } else {
+        setError(msg || '인증 확인 중 오류가 발생했습니다.')
+      }
     } finally {
       setLoading(false)
     }
