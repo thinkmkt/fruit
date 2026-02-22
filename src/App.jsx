@@ -319,7 +319,7 @@ const TABS = [
   { key: 'resArrearsList',      label: '체납내역', color: 'red' },
 ]
 
-function ResultsScreen({ results, onReset }) {
+function ResultsScreen({ results, rawResponse, onReset }) {
   const [activeTab, setActiveTab] = useState(0)
 
   const counts = TABS.map(t => (results?.[t.key]?.length ?? 0))
@@ -372,8 +372,8 @@ function ResultsScreen({ results, onReset }) {
       />
 
       <details className="raw-data">
-        <summary>원본 데이터 (디버그)</summary>
-        <pre>{JSON.stringify(results, null, 2)}</pre>
+        <summary>전체 응답 원본 (디버그)</summary>
+        <pre>{JSON.stringify(rawResponse, null, 2)}</pre>
       </details>
 
       <button className="btn-primary" onClick={onReset}>새로운 조회</button>
@@ -398,6 +398,7 @@ export default function App() {
   const [form, setForm] = useState(INITIAL_FORM)
   const [twoWayInfo, setTwoWayInfo] = useState(null)
   const [results, setResults] = useState(null)
+  const [rawResponse, setRawResponse] = useState(null)
 
   const handleChange = (e) =>
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }))
@@ -467,7 +468,7 @@ export default function App() {
       const res = await apiPost(body, 270_000)
       const resultData = res.data ?? res
       console.log('[CODEF 전체 응답]', JSON.stringify(res, null, 2))
-      console.log('[resultData]', JSON.stringify(resultData, null, 2))
+      setRawResponse(res)
       setResults(resultData)
       setStep(3)
     } catch (e) {
@@ -516,7 +517,7 @@ export default function App() {
         />
       )}
       {step === 3 && (
-        <ResultsScreen results={results} onReset={handleReset} />
+        <ResultsScreen results={results} rawResponse={rawResponse} onReset={handleReset} />
       )}
     </div>
   )
