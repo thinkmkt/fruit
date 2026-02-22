@@ -66,7 +66,15 @@ export async function onRequest(context) {
 
   const resText = await codefRes.text()
 
-  return new Response(resText, {
+  // CODEF API는 응답을 URL인코딩으로 반환 → 디코딩 후 JSON으로 전달
+  let decoded
+  try {
+    decoded = decodeURIComponent(resText)
+  } catch {
+    decoded = resText
+  }
+
+  return new Response(decoded, {
     status: codefRes.status,
     headers: {
       'Content-Type': 'application/json',
