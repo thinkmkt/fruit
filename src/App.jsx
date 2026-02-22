@@ -1,7 +1,23 @@
 import { useState, useEffect } from 'react'
+import { JSEncrypt } from 'jsencrypt'
 import './App.css'
 
 const ENDPOINT = '/api/v1/kr/public/nt/tax-invoice/sales-purchase-statistics'
+
+const CODEF_PUBLIC_KEY =
+  'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAj1+YQYyEz1V01m4GIDrn' +
+  'sw0BMz6cKiO6g6smRobDxpmPqfet7IgoH09aIud+pvwuEubJ6dbnE9Fzb4+isd0/' +
+  'PXYffXSY3sPZB4lNOz1QCJ832SISFrQnpifsSgy5IUWA2tdJMwlKENEbODfa41/+' +
+  'v64xMllQO6x6swALpkx8OPT9ArIJU2g/+yBl5HEoNj1AvlpPRIqlzjCdiZzw3Lr' +
+  'WZb6slWRptaxq6L5cvAaWt09GRHTQJjge0R/zHKCZ2aanTHzDmZwuJDWBMIdRJR2' +
+  'sLNl0RSrHxxKe2AQSCTr62bd38etmvlKinboMW2fh5eMCFaYO9nCrxzWdaJLdIsI' +
+  'nlwIDAQAB'
+
+function rsaEncrypt(plaintext) {
+  const enc = new JSEncrypt()
+  enc.setPublicKey(CODEF_PUBLIC_KEY)
+  return enc.encrypt(plaintext) || plaintext
+}
 
 // ── API ──────────────────────────────────────────────────────────────────────
 
@@ -330,7 +346,7 @@ export default function App() {
         loginType: '5',
         loginTypeLevel: '1',
         userName: form.userName,
-        loginIdentity: form.loginIdentity,
+        loginIdentity: rsaEncrypt(form.loginIdentity),
         phoneNo: form.phoneNo,
         inquiryType: form.inquiryType,
         searchType: form.searchType,
