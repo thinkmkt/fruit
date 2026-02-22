@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import './App.css'
 
 const ENDPOINT = '/api/v1/kr/public/nt/tax-invoice/sales-purchase-statistics'
-const TOKEN = import.meta.env.VITE_CODEF_TOKEN || ''
 
 // ── API ──────────────────────────────────────────────────────────────────────
 
@@ -11,7 +10,6 @@ async function apiPost(body, timeout) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${TOKEN}`,
     },
     body: JSON.stringify(body),
     signal: AbortSignal.timeout(timeout),
