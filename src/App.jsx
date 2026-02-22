@@ -415,7 +415,7 @@ export default function App() {
         loginType: '5',
         loginTypeLevel: '1',
         userName: form.userName,
-        identity: rsaEncrypt(form.identity),
+        identity: form.identity,
         phoneNo: form.phoneNo,
         telecom: form.telecom,
         year: form.year,
