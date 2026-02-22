@@ -417,7 +417,7 @@ export default function App() {
     setError('')
     try {
       const body = {
-        organization: '0004',
+        organization: '0002',
         loginType: '5',
         loginTypeLevel: '1',
         userName: form.userName,
