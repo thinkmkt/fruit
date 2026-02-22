@@ -371,6 +371,11 @@ function ResultsScreen({ results, onReset }) {
         emptyMsg={`${TABS[activeTab].label}이 없습니다.`}
       />
 
+      <details className="raw-data">
+        <summary>원본 데이터 (디버그)</summary>
+        <pre>{JSON.stringify(results, null, 2)}</pre>
+      </details>
+
       <button className="btn-primary" onClick={onReset}>새로운 조회</button>
     </div>
   )
@@ -461,6 +466,8 @@ export default function App() {
       }
       const res = await apiPost(body, 270_000)
       const resultData = res.data ?? res
+      console.log('[CODEF 전체 응답]', JSON.stringify(res, null, 2))
+      console.log('[resultData]', JSON.stringify(resultData, null, 2))
       setResults(resultData)
       setStep(3)
     } catch (e) {

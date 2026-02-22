@@ -534,6 +534,40 @@
   font-weight: 500;
 }
 
+/* ── Raw Data Debug ── */
+.raw-data {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.raw-data summary {
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  background: var(--bg);
+  user-select: none;
+}
+
+.raw-data summary:hover {
+  color: var(--text-secondary);
+}
+
+.raw-data pre {
+  margin: 0;
+  padding: 12px 14px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  line-height: 1.6;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+
 /* ── Animation ── */
 @keyframes fade-up {
   from { opacity: 0; transform: translateY(10px); }
