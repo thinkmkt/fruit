@@ -30,8 +30,18 @@ async function apiPost(body, timeout) {
     body: JSON.stringify(body),
     signal: AbortSignal.timeout(timeout),
   })
-  if (!res.ok) throw new Error(`서버 오류 (HTTP ${res.status})`)
-  return res.json()
+  const text = await res.text()
+  if (!res.ok) {
+    let detail = ''
+    try {
+      const j = JSON.parse(text)
+      detail = j.error || j.message || JSON.stringify(j)
+    } catch {
+      detail = text.slice(0, 200)
+    }
+    throw new Error(`서버 오류 (HTTP ${res.status}): ${detail}`)
+  }
+  return JSON.parse(text)
 }
 
 // ── StepBar ──────────────────────────────────────────────────────────────────
