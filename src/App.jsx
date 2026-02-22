@@ -466,9 +466,17 @@ export default function App() {
         },
       }
       const res = await apiPost(body, 270_000)
-      const resultData = res.data ?? res
       console.log('[CODEF 전체 응답]', JSON.stringify(res, null, 2))
       setRawResponse(res)
+
+      const code = res.result?.code || ''
+      if (code && code !== 'CF-00000') {
+        const msg = res.result?.message || '데이터 조회에 실패했습니다.'
+        setError(`${msg.replace(/\+/g, ' ')} (${code})`)
+        return
+      }
+
+      const resultData = res.data ?? res
       setResults(resultData)
       setStep(3)
     } catch (e) {

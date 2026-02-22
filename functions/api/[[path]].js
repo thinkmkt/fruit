@@ -1,4 +1,4 @@
-const CODEF_BASE = 'https://development.codef.io'
+const CODEF_BASE = 'https://api.codef.io'
 const OAUTH_URL = 'https://oauth.codef.io/oauth/token'
 
 async function getAccessToken(clientId, clientSecret) {
