@@ -390,16 +390,20 @@ export default function App() {
     }
   }
 
-  // Step 2 → 3: 인증 완료 확인
+  // Step 2 → 3: 인증 완료 확인 (스펙: simpleAuth, is2Way, twoWayInfo 만 전송)
   const handleConfirm = async () => {
     setLoading(true)
     setError('')
     try {
       const body = {
-        ...savedBody,
         simpleAuth: '1',
         is2Way: true,
-        twoWayInfo,
+        twoWayInfo: {
+          jobIndex: twoWayInfo.jobIndex,
+          threadIndex: twoWayInfo.threadIndex,
+          jti: twoWayInfo.jti,
+          twoWayTimestamp: Number(twoWayInfo.twoWayTimestamp),
+        },
       }
       const res = await apiPost(body, 270_000)
       const resultData = res.data ?? res
